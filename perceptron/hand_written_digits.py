@@ -2,6 +2,8 @@ import pygame
 import numpy as np
 from perceptron import *
 from dataset import *
+import random
+
 # initialize the pygame module
 pygame.init()
 
@@ -116,7 +118,14 @@ def vertical_reflection(grid):
         for column in range(w):
             new_grid[row,column] = grid [row,4-column]
     return new_grid
-
+def random_draw(grid):
+    for row in range(h):
+        for column in range(w):
+            if random.random() > 0.5:
+                grid[row,column] =1
+            else:
+                grid[row,column] =0
+    return grid
 def move_draw(position, grid):
     new_grid = grid.copy()
     if position["column"] == w:
@@ -131,8 +140,7 @@ def move_draw(position, grid):
         elif position['row'] == 4:
             return move_rotation(grid, new_grid)
         elif position['row'] == 5:
-            # random
-            pass
+            return random_draw(grid)
         elif position['row'] == 6:
             return horizontal_reflection(grid)   
         elif position['row'] == 7:
