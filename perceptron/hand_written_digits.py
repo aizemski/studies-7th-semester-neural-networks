@@ -57,6 +57,18 @@ for i in range(len(digits)):
         (w+1)*(width+margin)+5, 5+45*i))
 
 
+# create perceptrons
+perceptrons = []
+input_size = 5
+for i in range(10):
+    perceptrons.append(Perceptron(input_size*input_size))
+# prepare data
+training_inputs = [ np.ravel(n) for n in number ]
+# train perceptrons
+for i in range(10):
+    labels = np.zeros(10)
+    labels[i] = 1
+    perceptrons[i].train(training_inputs, labels)
 def move_up(grid, new_grid):
     for row in range(h):
         for column in range(w):
@@ -153,7 +165,9 @@ def move_draw(position, grid):
         if position['row'] < 10:
             return draw_digit(position['row'])
     return grid
-
+def perceptron_result(grid):
+    for i in range(len(perceptrons)):
+        print('{}: {}'.format(i,perceptrons[i].predict(np.ravel(grid))))
 
 # main loop
 while True:
@@ -169,11 +183,14 @@ while True:
             try:
                 if grid[row, column] == 0:
                     grid[row, column] = 1
+
                 else:
                     grid[row, column] = 0
+             
             except:
                 grid = move_draw({'row': row, 'column': column}, grid.copy())
-
+            print('@@@@@@@@@@@@@@@@@@@')
+            perceptron_result(grid)
     # drawing buttons and grid
     for i in range(len(textRect)):
         screen.blit(text[i], textRect[i])
@@ -189,6 +206,7 @@ while True:
                               (margin + height) * row + margin,
                               width,
                               height])
+    
 
     pygame.display.flip()
 
