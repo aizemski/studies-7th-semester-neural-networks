@@ -104,6 +104,18 @@ def draw_digit(digit):
     # number form dataset.py
     return np.array(number[digit])
 
+def horizontal_reflection(grid):
+    new_grid = grid.copy()
+    for row in range(h):
+        for column in range(w):
+            new_grid[row,column] = grid [4-row,column]
+    return new_grid
+def vertical_reflection(grid):
+    new_grid = grid.copy()
+    for row in range(h):
+        for column in range(w):
+            new_grid[row,column] = grid [row,4-column]
+    return new_grid
 
 def move_draw(position, grid):
     new_grid = grid.copy()
@@ -122,15 +134,12 @@ def move_draw(position, grid):
             # random
             pass
         elif position['row'] == 6:
-            # horizontal
-            pass
+            return horizontal_reflection(grid)   
         elif position['row'] == 7:
-            # vertical
-            pass
+            return vertical_reflection(grid)
         elif position['row'] == 8:
             return neg(grid)
         elif position['row'] == 9:
-            # clear
             return np.zeros((h, w))
     if position['column'] == w+1:
         if position['row'] < 10:
