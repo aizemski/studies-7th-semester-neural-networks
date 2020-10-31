@@ -69,41 +69,42 @@ for i in range(10):
     labels = np.zeros(10)
     labels[i] = 1
     perceptrons[i].train(training_inputs, labels)
+# move drawing one line up 
 def move_up(grid, new_grid):
     for row in range(h):
         for column in range(w):
             new_grid[row, column] = grid[(row+1) % 5, column]
     return new_grid
 
-
+# move drawing one line down
 def move_down(grid, new_grid):
     for row in range(h):
         for column in range(w):
             new_grid[row, column] = grid[(row-1) % 5, column]
     return new_grid
 
-
+# move drawing one column right
 def move_right(grid, new_grid):
     for row in range(h):
         for column in range(w):
             new_grid[row, column] = grid[row, (column-1) % 5]
     return new_grid
 
-
+# move drawing one column left
 def move_left(grid, new_grid):
     for row in range(h):
         for column in range(w):
             new_grid[row, column] = grid[row, (column+1) % 5]
     return new_grid
 
-
-def move_rotation(grid, new_grid):  # rotation center is center of grid
+ # rotation clockwise where center of rotation is center of grid 
+def move_rotation(grid, new_grid): 
     for row in range(h):
         for column in range(w):
             new_grid[row, column] = grid[(4-column), (row)]
     return new_grid
 
-
+# change green to white and white to green
 def neg(grid):
     for row in range(h):
         for column in range(w):
@@ -113,23 +114,25 @@ def neg(grid):
                 grid[row, column] = 0
     return grid
 
-
+# draw digits 
 def draw_digit(digit):
     # number form dataset.py
     return np.array(number[digit])
-
+# horizontal reflection of drawing
 def horizontal_reflection(grid):
     new_grid = grid.copy()
     for row in range(h):
         for column in range(w):
             new_grid[row,column] = grid [4-row,column]
     return new_grid
+# vertical reflection of drawing    
 def vertical_reflection(grid):
     new_grid = grid.copy()
     for row in range(h):
         for column in range(w):
             new_grid[row,column] = grid [row,4-column]
     return new_grid
+# random drawing 
 def random_draw(grid):
     for row in range(h):
         for column in range(w):
@@ -138,6 +141,7 @@ def random_draw(grid):
             else:
                 grid[row,column] =0
     return grid
+# manage options 
 def move_draw(position, grid):
     new_grid = grid.copy()
     if position["column"] == w:
@@ -164,8 +168,10 @@ def move_draw(position, grid):
     if position['column'] == w+1:
         if position['row'] < 10:
             return draw_digit(position['row'])
-    return grid
+    return grid #return not changed grid
+
 def perceptron_result(grid):
+    #displaying in the console prediction  of perceptrons 
     for i in range(len(perceptrons)):
         print('{}: {}'.format(i,perceptrons[i].predict(np.ravel(grid))))
 
@@ -188,14 +194,18 @@ while True:
                     grid[row, column] = 0
              
             except:
+                # catch if clicked outside of grid
                 grid = move_draw({'row': row, 'column': column}, grid.copy())
+            # display result of prediction
             print('@@@@@@@@@@@@@@@@@@@')
             perceptron_result(grid)
+
     # drawing buttons and grid
     for i in range(len(textRect)):
         screen.blit(text[i], textRect[i])
     for i in range(len(digitsRect)):
         screen.blit(digits[i], digitsRect[i])
+    # drwaing grid
     for row in range(h):
         for column in range(w):
             color = white
