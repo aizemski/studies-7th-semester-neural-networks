@@ -1,6 +1,6 @@
 import pygame
 import numpy as np
-from perceptron import *
+from adaline import *
 from dataset import *
 import random
 
@@ -57,18 +57,18 @@ for i in range(len(digits)):
         (w+1)*(width+margin)+5, 5+45*i))
 
 
-# create perceptrons
-perceptrons = []
+# create adaline
+adaline = []
 input_size = 5
 for i in range(10):
-    perceptrons.append(Perceptron(input_size*input_size))
+    adaline.append(Adaline(input_size*input_size,biased=True))
 # prepare data
 training_inputs = [ np.ravel(n) for n in number ]
-# train perceptrons
+# train adaline
 for i in range(10):
     labels = np.zeros(10)
     labels[i] = 1
-    perceptrons[i].train(training_inputs, labels)
+    adaline[i].train(training_inputs, labels)
 # move drawing one line up 
 def move_up(grid, new_grid):
     for row in range(h):
@@ -172,9 +172,9 @@ def move_draw(position, grid):
     return grid #return not changed grid
 
 def perceptron_result(grid):
-    #displaying in the console prediction  of perceptrons 
-    for i in range(len(perceptrons)):
-        print('{}: {}'.format(i,perceptrons[i].predict(np.ravel(grid))))
+    #displaying in the console prediction  of adaline 
+    for i in range(len(adaline)):
+        print('{}: {}'.format(i,adaline[i].predict(np.ravel(grid))))
 
 # main loop
 while True:
