@@ -14,7 +14,7 @@ screen = pygame.display.set_mode((480, 480))
 width, height = 40, 40
 
 # w - number of columny , h- number of rows
-w, h = 5, 5
+w, h = 7, 7
 # margin of the grid
 margin = 5
 # colors
@@ -59,10 +59,15 @@ for i in range(len(digits)):
 
 # create adaline
 adaline = []
-input_size = 5
+input_size = 7
 for i in range(10):
     adaline.append(Adaline(input_size*input_size,biased=True))
 # prepare data
+# data = []
+# for i in range(len(number)*7):
+    
+
+    
 training_inputs = [ np.ravel(n) for n in number ]
 # train adaline
 for i in range(10):
@@ -73,35 +78,35 @@ for i in range(10):
 def move_up(grid, new_grid):
     for row in range(h):
         for column in range(w):
-            new_grid[row, column] = grid[(row+1) % 5, column]
+            new_grid[row, column] = grid[(row+1) % 7, column]
     return new_grid
 
 # move drawing one line down
 def move_down(grid, new_grid):
     for row in range(h):
         for column in range(w):
-            new_grid[row, column] = grid[(row-1) % 5, column]
+            new_grid[row, column] = grid[(row-1) % 7, column]
     return new_grid
 
 # move drawing one column right
 def move_right(grid, new_grid):
     for row in range(h):
         for column in range(w):
-            new_grid[row, column] = grid[row, (column-1) % 5]
+            new_grid[row, column] = grid[row, (column-1) % 7]
     return new_grid
 
 # move drawing one column left
 def move_left(grid, new_grid):
     for row in range(h):
         for column in range(w):
-            new_grid[row, column] = grid[row, (column+1) % 5]
+            new_grid[row, column] = grid[row, (column+1) % 7]
     return new_grid
 
  # rotation clockwise where center of rotation is center of grid 
 def move_rotation(grid, new_grid): 
     for row in range(h):
         for column in range(w):
-            new_grid[row, column] = grid[(4-column), (row)]
+            new_grid[row, column] = grid[(6-column), (row)]
     return new_grid
 
 # change green to white and white to green
@@ -123,24 +128,23 @@ def horizontal_reflection(grid):
     new_grid = grid.copy()
     for row in range(h):
         for column in range(w):
-            new_grid[row,column] = grid [4-row,column]
+            new_grid[row,column] = grid [6-row,column]
     return new_grid
 # vertical reflection of drawing    
 def vertical_reflection(grid):
     new_grid = grid.copy()
     for row in range(h):
         for column in range(w):
-            new_grid[row,column] = grid [row,4-column]
+            new_grid[row,column] = grid [row,6-column]
     return new_grid
 # random drawing 
 # TODO poprawic
 def random_draw(grid):
     for row in range(h):
         for column in range(w):
-            if random.random() > 0.1:
+            if random.random() > 0.7:
                 grid[row,column] =1
-            else:
-                grid[row,column] =0
+      
     return grid
 # manage options 
 def move_draw(position, grid):
@@ -172,10 +176,17 @@ def move_draw(position, grid):
     return grid #return not changed grid
 
 def perceptron_result(grid):
-    #displaying in the console prediction  of adaline 
+    #displaying in the console prediction  of adaline
+    maxi = -10
+    index = 0
+    
     for i in range(len(adaline)):
-        print('{}: {}'.format(i,adaline[i].predict(np.ravel(grid))))
-
+        res =adaline[i].predict(np.ravel(grid))
+        if res > maxi:
+            maxi = res
+            index = i
+        # print('{}: {}'.format(i,adaline[i].predict(np.ravel(grid))))
+    print(index)
 # main loop
 while True:
     for event in pygame.event.get():

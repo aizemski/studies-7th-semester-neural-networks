@@ -9,13 +9,14 @@ class Adaline(object):
     self.iterations = iterations
     self.biased = biased
     if self.biased:
-      self.weights = np.random.rand(2*self.no_of_inputs+1) #Bias
+      self.weights = np.random.random(2*self.no_of_inputs+1) -0.5 #Bias
     else:
-      self.weights = np.random.rand(2*self.no_of_inputs) 
+      self.weights = np.random.random(2*self.no_of_inputs)-0.5
+  
     self.errors = []
  
   def train(self, training_data_x, training_data_y):
-    # training_data_x = self._standarize(training_data_x)
+    # training_data_x = self._standarize(training_data_x)git
     training_data_x = self._normalize(training_data_x) #normalizacja danych
     training_data_y = self._normalize(training_data_y)
     training_data_x = [i * 0.8 + 0.1 for i in training_data_x]
@@ -29,8 +30,8 @@ class Adaline(object):
         x = np.concatenate([x, fourier_transform(x)])
         out = self.output(x)
         if self.biased:
-          self.weights[1:] += self.learning_rate * (y-out) * x #* out * (1-out) #aktywacja - zamiast mnozenia *1 mamy tu (out)(1-out)
-          self.weights[0] += self.learning_rate * (y-out) #* out * (1-out)
+          self.weights[1:] += self.learning_rate * (y-out) * x * out * (1-out) #aktywacja - zamiast mnozenia *1 mamy tu (out)(1-out)
+          self.weights[0] += self.learning_rate * (y-out) * out * (1-out)
         else:    
           self.weights += self.learning_rate * (y-out) * x #* out #* (1-out) 
         e += (y - out)**2
@@ -48,8 +49,8 @@ class Adaline(object):
     return X
  
   def _activation(self, x): 
-    return x
-    # return 1/(1 + np.exp((-1) * x))
+    # return x
+    return 1/(1 + np.exp((-1) * x))
  
   def output(self, input):
     if self.biased:
